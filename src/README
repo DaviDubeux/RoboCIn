@@ -1,0 +1,11 @@
+O pin "Mode" tem 3 modos de funcionamento:
+
+Mode = 0 -- dá liberdade pra controlar os inputs 1 e 2 livremente, configurando assim o sentido de rotação do motor
+
+Mode = 1 -- modo PH/EN (phase enable mode), com o pino EN ligado, o pino PH controla o sentido de rotação do motor, associando 0 e 1 com horário e anti-horário
+
+Mode = float -- entendi foi nada parece bagunça e overkill
+
+-----------------------------------------
+
+potência vem do pino VCC ?
