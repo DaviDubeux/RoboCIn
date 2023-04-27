@@ -1,43 +1,39 @@
 #include <mbed.h>
 #include <iostream>
 
-  DigitalOut enable(PA_1); //Enable - PWM
-  DigitalOut phase(PA_2); //Phase - horário ou anti-horário
-  DigitalIn ChA(PC_0);
-  DigitalIn ChB(PC_1);
+PwmOut enable (PB_5);
+DigitalOut phase (PB_6);
+InterruptIn ChA(PA_8);
+DigitalIn ChB(PA_9);
 
-  int pos = 0;
+int pos = 0;
 
-  void readEncoder() {
-    int b = ChA;
-    if (b>0) {
-      pos++;
-    }
-    else{
-      pos--;
-    }
-    }
-
+void readEncoder() {
+  int b = ChB;
+  if (b>0) {
+    pos++;
+  }
+  else {
+    pos--;
+  }
+  }
 
 int main() {
+  phase = 0;
+  ChA.rise(&readEncoder);
 
   while(1) {
-    
-    enable = 0.4;
-    phase = 1;
-    cout<<pos;
-    ThisThread::sleep_for(1);
-    phase = 0;
-    cout<<pos;
-    ThisThread::sleep_for(1);
+    for (int i = 0; i < 100; i++) {
 
-    enable = 0.8;
-    phase = 1;
-    cout<<pos;
-    ThisThread::sleep_for(1);
-    phase = 0;
-    cout<<pos;
-    ThisThread::sleep_for(1);
+      enable = i/100.0;
+       ThisThread::sleep_for(10ms);
+      cout<<pos<<endl;
 
+      if (i == 99){
+        i = 0;
+        phase = !phase;
+      }
+
+    }
   }
 }
