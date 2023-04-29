@@ -1,39 +1,51 @@
 #include <mbed.h>
 #include <iostream>
 
+using namespace std::chrono;
+
+//pins
 PwmOut enable (PB_5);
 DigitalOut phase (PB_6);
 InterruptIn ChA(PA_8);
 DigitalIn ChB(PA_9);
 
-int pos = 0;
+//globals
+Timer t;
+long prevT = 0;
+int prevPos = 0;
+volatile int pos_i = 0;
 
 void readEncoder() {
   int b = ChB;
+  int increment = 0;
   if (b>0) {
-    pos++;
+    increment++;
   }
   else {
-    pos--;
+    increment--;
   }
+  pos_i = pos_i + increment;
   }
+
 
 int main() {
-  phase = 0;
   ChA.rise(&readEncoder);
+  t.start();
 
   while(1) {
-    for (int i = 0; i < 100; i++) {
+   int pos = 0;
 
-      enable = i/100.0;
-       ThisThread::sleep_for(10ms);
-      cout<<pos<<endl;
+   //ATOMIC_BLOCKS?? *********
+   pos = pos_i;
 
-      if (i == 99){
-        i = 0;
-        phase = !phase;
-      }
+   //compute velocity
+   long currT = duration_cast<microseconds>(t.elapsed_time()).count(); //********
+   float deltaT = ((float)(currT - prevT))/1e6;
+   float velocity = (pos - prevPos)/deltaT;
+   prevPos = pos;
+   prevT = currT;
 
-    }
+   cout<<velocity<<endl;
+   
   }
 }
