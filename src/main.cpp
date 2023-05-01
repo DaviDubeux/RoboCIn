@@ -43,18 +43,13 @@ void readEncoder() {
   }
   pos_i = pos_i + increment;
 
-    /*
     //compute velocity with method 2
     Timer t;
     long currT = duration_cast<microseconds>(t.elapsed_time()).count(); //********
     float deltaT = ((float) (currT - prevT_i))/1e6;
     velocity_i = increment/deltaT;
     prevT_i = currT;
-    */
   }
-
-
-
 
 int main() {
   ChA.rise(&readEncoder);
