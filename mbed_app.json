@@ -1,0 +1,8 @@
+{
+  "target_overrides": {
+    "*": {
+      "targe.printf_lib": "std",
+      "platform.error-filename-caputre-enabled": true
+    }
+  }
+}
